@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MFI Platform Design System — Complete Screen Gallery</title>
-<meta name="description" content="Comprehensive design system gallery featuring 2038+ screens across Web Platform, Field Staff Mobile, and Loanbook Web applications.">
+<meta name="description" content="Comprehensive design system gallery featuring 2,045 screens across Web Platform, Field Staff Mobile, GRT, and Loanbook Web applications.">
 <meta property="og:title" content="MFI Platform Design System Gallery">
-<meta property="og:description" content="Browse 2038+ production screens from our microfinance platform.">
+<meta property="og:description" content="Browse 2,045 production screens from our microfinance platform.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,16 +19,28 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: #f8fafc; col
 .sidebar h1 { font-size: 16px; padding: 0 20px 16px; border-bottom: 1px solid #334155; color: #fff; }
 .sidebar .stats { padding: 12px 20px; font-size: 12px; color: #94a3b8; border-bottom: 1px solid #334155; }
 .sidebar .file-group { margin-top: 12px; }
-.sidebar .file-label { font-size: 13px; font-weight: 700; padding: 8px 20px; color: #60a5fa; cursor: pointer; }
+.sidebar .file-label { font-size: 13px; font-weight: 700; padding: 8px 20px; color: #60a5fa; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
 .sidebar .file-label:hover { background: #334155; }
+.sidebar .file-label .toggle-icon { font-size: 10px; transition: transform 0.2s; }
+.sidebar .file-label.collapsed .toggle-icon { transform: rotate(-90deg); }
+.sidebar .file-group .links { max-height: 2000px; overflow: hidden; transition: max-height 0.3s ease; }
+.sidebar .file-group .links.collapsed { max-height: 0; }
 .sidebar .page-link { display: block; font-size: 12px; padding: 4px 20px 4px 32px; color: #94a3b8; text-decoration: none; cursor: pointer; }
 .sidebar .page-link:hover { background: #334155; color: #fff; }
 .sidebar .page-link .count { color: #64748b; font-size: 11px; }
 .main { margin-left: 280px; padding: 24px; flex: 1; }
 .search-bar { position: sticky; top: 0; background: #f8fafc; padding: 16px 0; z-index: 10; border-bottom: 1px solid #e2e8f0; margin-bottom: 24px; }
-.search-bar input { width: 100%; max-width: 500px; padding: 10px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; }
+.search-wrapper { position: relative; max-width: 500px; }
+.search-bar input { width: 100%; padding: 10px 40px 10px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; }
 .search-bar input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
-.search-bar .result-count { margin-top: 8px; font-size: 13px; color: #64748b; }
+.search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: #e2e8f0; border: none; color: #64748b; cursor: pointer; font-size: 16px; width: 24px; height: 24px; border-radius: 50%; display: none; align-items: center; justify-content: center; }
+.search-clear:hover { background: #cbd5e1; }
+.search-clear.visible { display: flex; }
+.search-bar .result-count { margin-top: 8px; font-size: 14px; font-weight: 600; color: #0f172a; }
+.empty-state { text-align: center; padding: 80px 20px; color: #64748b; }
+.empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+.empty-state h3 { font-size: 18px; margin-bottom: 8px; color: #334155; }
+.empty-state p { font-size: 14px; }
 .file-section { margin-bottom: 32px; }
 .file-section h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; color: #0f172a; }
 .file-section .codebase { font-size: 13px; color: #64748b; margin-bottom: 16px; }
@@ -52,6 +64,12 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: #f8fafc; col
 .intro-section .stat-card .number { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
 .intro-section .stat-card .label { font-size: 13px; opacity: 0.9; }
 .menu-toggle { display: none; position: fixed; top: 16px; left: 16px; z-index: 100; background: #1e293b; color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 18px; }
+.scroll-top { position: fixed; bottom: 24px; right: 24px; background: #3b82f6; color: #fff; border: none; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s, transform 0.2s; z-index: 50; }
+.scroll-top.visible { opacity: 1; visibility: visible; }
+.scroll-top:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+.scroll-top:active { transform: translateY(0); }
+a:focus, button:focus { outline: 2px solid #3b82f6; outline-offset: 2px; }
+.page-link:focus { background: #334155; color: #fff; }
 @media (max-width: 768px) {
   .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; z-index: 99; }
   .sidebar.open { transform: translateX(0); }
@@ -71,7 +89,8 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: #f8fafc; col
   <h1>🎨 Design System</h1>
   <div class="stats">MFI Platform • 2045 Screens</div>
   <div class="file-group">
-    <div class="file-label">Web Platform - Old UI</div>
+    <div class="file-label" onclick="toggleFileGroup(this)">Web Platform - Old UI <span class="toggle-icon">▼</span></div>
+    <div class="links">
     <div class="codebase" style="font-size:11px;padding:0 20px 4px 20px;color:#64748b">Kotak on-prem</div>
     <a class="page-link" href="#Web-Platform---Old-UI-Login">Login <span class="count">(3)</span></a>
     <a class="page-link" href="#Web-Platform---Old-UI-QC1---29-08-23">QC1 | 29.08.23 <span class="count">(85)</span></a>
@@ -96,9 +115,11 @@ Testing <span class="count">(6)</span></a>
     <a class="page-link" href="#Web-Platform---Old-UI-Consent-at-BLA">Consent at BLA <span class="count">(1)</span></a>
     <a class="page-link" href="#Web-Platform---Old-UI-CB-Consent---New">CB Consent - New <span class="count">(20)</span></a>
     <a class="page-link" href="#Web-Platform---Old-UI-----In-Review---">🔴  In Review  ⭕ <span class="count">(30)</span></a>
+    </div>
   </div>
   <div class="file-group">
-    <div class="file-label">Loanbook Field Staff</div>
+    <div class="file-label" onclick="toggleFileGroup(this)">Loanbook Field Staff <span class="toggle-icon">▼</span></div>
+    <div class="links">
     <div class="codebase" style="font-size:11px;padding:0 20px 4px 20px;color:#64748b">Digamber + Kotak SaaS</div>
     <a class="page-link" href="#Loanbook-Field-Staff-Collections">Collections <span class="count">(148)</span></a>
     <a class="page-link" href="#Loanbook-Field-Staff-Search">Search <span class="count">(9)</span></a>
@@ -112,9 +133,11 @@ Testing <span class="count">(6)</span></a>
     <a class="page-link" href="#Loanbook-Field-Staff-Ideas">Ideas <span class="count">(22)</span></a>
     <a class="page-link" href="#Loanbook-Field-Staff-Components---Workspace">Components | Workspace <span class="count">(47)</span></a>
     <a class="page-link" href="#Loanbook-Field-Staff-For-Presentations">For Presentations <span class="count">(78)</span></a>
+    </div>
   </div>
   <div class="file-group">
-    <div class="file-label">Loanbook Web</div>
+    <div class="file-label" onclick="toggleFileGroup(this)">Loanbook Web <span class="toggle-icon">▼</span></div>
+    <div class="links">
     <div class="codebase" style="font-size:11px;padding:0 20px 4px 20px;color:#64748b">Digamber + Kotak SaaS</div>
     <a class="page-link" href="#Loanbook-Web-Stage">Stage <span class="count">(434)</span></a>
     <a class="page-link" href="#Loanbook-Web-----In-Review---">🔴  In Review  ⭕ <span class="count">(46)</span></a>
@@ -123,18 +146,30 @@ Testing <span class="count">(6)</span></a>
     <a class="page-link" href="#Loanbook-Web-Most-used-components">Most used components <span class="count">(2)</span></a>
     <a class="page-link" href="#Loanbook-Web-References">References <span class="count">(1)</span></a>
     <a class="page-link" href="#Loanbook-Web-Archive">Archive <span class="count">(4)</span></a>
+    </div>
   </div>
   <div class="file-group">
-    <div class="file-label">GRT Meeting Designs</div>
+    <div class="file-label" onclick="toggleFileGroup(this)">GRT Meeting Designs <span class="toggle-icon">▼</span></div>
+    <div class="links">
     <div class="codebase" style="font-size:11px;padding:0 20px 4px 20px;color:#64748b">Kotak SaaS Mobile</div>
     <a class="page-link" href="#GRT-Meeting-Designs-Core-Screens">Core Screens <span class="count">(7)</span></a>
     <a class="page-link" href="#GRT-Meeting-Designs-Interactive-Demo">🎯 Interactive Demo</a>
+    </div>
   </div>
 </nav>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">↑</button>
 <div class="main">
   <div class="search-bar">
-    <input type="text" id="search" placeholder="Search screens by name... (e.g. Customer, QC1, Disbursement)" autocomplete="off">
+    <div class="search-wrapper">
+      <input type="text" id="search" placeholder="Search screens by name... (press / to focus)" autocomplete="off" aria-label="Search screens">
+      <button class="search-clear" id="searchClear" aria-label="Clear search">×</button>
+    </div>
     <div class="result-count" id="resultCount"></div>
+    <div class="empty-state hidden" id="emptyState">
+      <div class="icon">🔍</div>
+      <h3>No screens found</h3>
+      <p>Try a different search term or browse categories in the sidebar</p>
+    </div>
   </div>
 
   <section class="intro-section">
@@ -14854,29 +14889,60 @@ customer related</div>
 </div></div>
 <script>
 const search = document.getElementById('search');
+const searchClear = document.getElementById('searchClear');
 const cards = document.querySelectorAll('.card');
 const resultCount = document.getElementById('resultCount');
+const emptyState = document.getElementById('emptyState');
 const pageSections = document.querySelectorAll('.page-section');
 const fileSections = document.querySelectorAll('.file-section');
 const pageLinks = document.querySelectorAll('.page-link');
+const scrollTop = document.getElementById('scrollTop');
 
+// File group toggle
+function toggleFileGroup(label) {
+  label.classList.toggle('collapsed');
+  label.nextElementSibling.classList.toggle('collapsed');
+}
+
+// Search functionality
 search.addEventListener('input', () => {
   const q = search.value.toLowerCase().trim();
   let visible = 0;
+
+  // Toggle clear button
+  searchClear.classList.toggle('visible', q.length > 0);
+
   cards.forEach(c => {
     const match = !q || c.dataset.name.includes(q) || c.querySelector('.texts').textContent.toLowerCase().includes(q);
     c.classList.toggle('hidden', !match);
     if (match) visible++;
   });
+
   pageSections.forEach(ps => {
     const hasVisible = ps.querySelectorAll('.card:not(.hidden)').length > 0;
     ps.classList.toggle('hidden', !hasVisible);
   });
+
   fileSections.forEach(fs => {
     const hasVisible = fs.querySelectorAll('.card:not(.hidden)').length > 0;
     fs.classList.toggle('hidden', !hasVisible);
   });
-  resultCount.textContent = q ? visible + ' of 2045 screens' : '';
+
+  // Update result count and empty state
+  if (q) {
+    resultCount.textContent = visible > 0 ? `Found ${visible} of 2,045 screens` : '';
+    emptyState.classList.toggle('hidden', visible > 0);
+  } else {
+    resultCount.textContent = '';
+    emptyState.classList.add('hidden');
+  }
+});
+
+// Clear search
+searchClear.addEventListener('click', () => {
+  search.value = '';
+  search.dispatchEvent(new Event('input'));
+  search.focus();
 });
 
 // Hash navigation with smooth scroll
@@ -14933,6 +14999,25 @@ window.addEventListener('load', () => {
 
 window.addEventListener('hashchange', () => {
   navigateToSection(window.location.hash);
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  // '/' to focus search
+  if (e.key === '/' && document.activeElement !== search) {
+    e.preventDefault();
+    search.focus();
+  }
+  // 'Esc' to clear search
+  if (e.key === 'Escape' && document.activeElement === search) {
+    search.value = '';
+    search.dispatchEvent(new Event('input'));
+  }
+});
+
+// Scroll to top button
+window.addEventListener('scroll', () => {
+  scrollTop.classList.toggle('visible', window.scrollY > 300);
 });
 
 // Mobile: Click outside sidebar to close
