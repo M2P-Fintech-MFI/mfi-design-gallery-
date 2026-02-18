@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Large binary/image assets (775MB - tracked separately)
+docs/figma-images/
+docs/figma-json/
+docs/screens/
+docs/designs/
+docs/design-tokens/
+
+# Generated DOCX (binary, regenerate from MD source)
+docs/*.docx
+docs/**/*.docx
+BMADTEST/docs/*.docx
+
+# Large / temp files
+*.svg
+*.png
+docs/extracted_*
+docs/mxcell_data.txt
+docs/*.pdf
+docs/pragathi-tobe-flowchart.*
+docs/pragathi-tobe-swimlane.*
+docs/KOTAK*
+sheet_output.txt
+nul
+
+# Local scripts / exploratory
+scripts/_*
+read_excel.js
+read_sheet.js
+extract_specific.py
+extract_svg.ps1
+parse_drawio.ps1
+PROJECT_STRUCTURE_ANALYSIS.docx
+linkedin_agent_properties.txt
+
+# BMAD private memory
+_bmad/_memory/
+
+# VS Code
+.vscode/

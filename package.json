@@ -1,0 +1,23 @@
+{
+  "name": "bmad-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "html-docx-js": "^0.3.1",
+    "marked": "^17.0.1",
+    "pptxgenjs": "^4.0.1",
+    "puppeteer": "^24.37.2",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  }
+}
